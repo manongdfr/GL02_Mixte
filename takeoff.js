@@ -34,7 +34,6 @@ var rocket = {
 	command: command, 
 	radio: radio, 
 	satellite1: satellite1,
-	satellite2: satellite2
 };
 
 var checklist = {
