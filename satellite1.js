@@ -1,6 +1,7 @@
 var satellite1 = {
 check: function(){
-console.log("Satellite 1 Ready !")
+    console.log("Green level checked".green)
+    console.log("Satellite 1 Ready !")
 return true
 }
 }
