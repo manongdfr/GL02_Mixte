@@ -1,19 +1,12 @@
-var POI = function(nm, lt, lg, r){
-	this.name = nm;
-	this.lat = lt;
-	this.lng = lg;
-	this.ratings = [].concat(r);
+var CRU = function(sc, typ, pl, j, hd, hf, sG, salle){
+	this.seance = sc;
+	this.type = typ;
+	this.places = pl;
+	this.jour = j;
+	this.heureDebut = hd;
+	this.heureFin = hf;
+	this.sousGroupe = sG;
+	this.numSalle = salle;
 }
-	
-POI.prototype.averageRatings = function(){
-	var total = this.ratings.reduce((acc, elt) => acc + parseInt(elt), 0);
-	return total / this.ratings.length;
 
-};
-	
-POI.prototype.addRating = function(rating){
-	this.ratings.push(rating);
-};
-
-
-module.exports = POI;
+module.exports = CRU;
