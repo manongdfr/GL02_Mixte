@@ -142,7 +142,7 @@ CRUParser.prototype.name = function(input){
 CRUParser.prototype.latlng = function(input){
 	this.expect("latlng",input)
 	var curS = this.next(input);
-	if(matched = curS.match(/(-?\d+(\.\d+)?);(-?\d+(\.\d+)?)/)){
+	if(matched = curS.match(/(-?\d+(\.\d+)?);(-?\d+(\.\d+)?)/)){//format de la longitude/latitude. \d est un double (ou digit, jsp). "\." est un point. "-?" veut dire que "-" est non obligatoire je pense. pour les valeurs négatives
 		return { lat: matched[1], lng: matched[3] };
 	}else{
 		this.errMsg("Invalid latlng", input);
