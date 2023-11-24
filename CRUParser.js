@@ -4,10 +4,10 @@ var CRU = require('./CRU');
 
 var CRUParser = function(sTokenize, sParsedSymb){
 	// The list of POI parsed from the input file.
-	this.parsedCRU = [];
+	this.parsedCRU = []; // liste d'objets CRU
 	this.symb = ["+","","//"];
 	this.showTokenize = sTokenize;//booléen initié à l'instantiation. vrai = console.log(liste de ce qu'on a parsé, c.f. ligne 30 ). faux = affiche rien
-	this.showParsedSymbols = sParsedSymb;
+	this.showParsedSymbols = sParsedSymb;//booléen
 	this.errorCount = 0;
 }
 
