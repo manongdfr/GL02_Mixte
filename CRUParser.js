@@ -3,13 +3,6 @@ var CRU = require("./CRU");
 //CRU Parser
 
 var CRUParser = function (sTokenize, sParsedSymb) {
-  //   // The list of POI parsed from the input file.
-  //   this.parsedCRU = []; // liste d'objets CRU
-  //   this.symb = ["+", "", "//"];
-  //   this.showTokenize = sTokenize; //booléen initié à l'instantiation. vrai = console.log(liste de ce qu'on a parsé, c.f. ligne 30 ). faux = affiche rien
-  //   this.showParsedSymbols = sParsedSymb; //booléen
-  //   this.errorCount = 0;
-
   // The list of CRU parsed from the input file.
   this.parsedCRU = [];
   // this.symb = ["Seance2 S=4","+","P","H","S","//", "//\n\n"];
@@ -23,19 +16,19 @@ var CRUParser = function (sTokenize, sParsedSymb) {
 
 // tokenize : tranform the data input into a list
 CRUParser.prototype.tokenize = function (data) {
-  //seperator +
-  var separator = /(\r\n|[+]|=|,|[/][/]\r\n)/;
+  const regexCours = /(^\+([A-Z]{2,10}\d{0,2}[A-Z]?\d?)$)|(^1,.*\/\/$)/;
+  const separator = /\r\n/;
   data = data.split(separator);
-
-  //seperator =
-  var separator = /(\r\n|=|,|[/][/]\r\n)/;
-  data = data.filter((val, idx) => !val.match(separator));
-  //Ignorer les 15 premiers inputs qui correspondent aux phrases d'explication du début de fichier
-  for (i = 0; i < 14; i++) {
-    this.next(data);
-  }
+  data = data.filter((val, idx) => val.match(regexCours));
+  data = this.supUVUV(data);
   return data;
 };
+
+CRUParser.prototype.supUVUV = function(data){
+  const regex = /\+UVUV/;
+  data = data.filter((val,idx) => !val.match(regex));
+  return data;
+}
 
 // parse : analyze data by calling the first non terminal rule of the grammar
 CRUParser.prototype.parse = function (data) {
@@ -117,17 +110,17 @@ CRUParser.prototype.cru = function (input) {
   if (this.check("", input)) {
     this.expect("", input); //skip un start CRU, lancer une erreur si le start cru n'est pas trouvé
     var args = this.body(input); //contenu CRU
-	if(args == undefined) {
-		console.log("args undefined".red)
-		return true
-	}
+    if (args == undefined) {
+      console.log("args undefined".red);
+      return true;
+    }
 
     //puis créer un nouveau CRU à partir des données qu'on vient de parser avec this.body(input)
 
-	console.log("kjbqdvkbzlqkbvzlkqbvzl".blue)
-	console.log(input[3]);
+    console.log("kjbqdvkbzlqkbvzlkqbvzl".blue);
+    console.log(input[3]);
 
-    var p = new CRU(
+    var p = new CRU();
     //   args.ue,
     //   args.statut,
     //   args.type,
@@ -137,7 +130,6 @@ CRUParser.prototype.cru = function (input) {
     //   args.heureFin,
     //   args.sousgroupe,
     //   args.salle
-    );
 
     this.note(input, p);
     this.expect("//\n\n", input);
@@ -158,7 +150,7 @@ CRUParser.prototype.cru = function (input) {
 
 // contenu cru récupérés
 CRUParser.prototype.body = function (input) {
-    console.log(input);
+  console.log(input);
 
   return {
     ue: ue,
@@ -218,17 +210,7 @@ CRUParser.prototype.place = function (input) {
 //Horaire
 CRUParser.prototype.horaire = function (input) {
   this.expect("H", input);
-  var curS = input[0];
-  if (
-    (matched = curS.match(
-      /([L]|[M][A]|[M][E]|[J]|[V]|[S])([" "])([0-9]{1,2}:[0-9]{1,2})(-)([0-9]{1,2}:[0-9]{1,2})/g
-    ))
-  ) {
-    matched = matched[0].split(/( )|-/);
-    return { jour: matched[0], heureDebut: matched[2], heureFin: matched[4] };
-  } else {
-    this.errMsg("Invalid horaire", input);
-  }
+
 };
 
 //Sous-groupe (F+ une lettre ou un chiffre)

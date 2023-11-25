@@ -18,6 +18,7 @@ function spec1(ue, logger) {
 
         console.log(analyzer.parse(data));
         var n = new RegExp(ue);
+        console.log(n)
         var filt = analyzer.parsedCRU.filter((p) => p.ue.match(n, "i"));
         if (Object.keys(filt).length > 0) {
           filtered = filtered.concat(filt);
