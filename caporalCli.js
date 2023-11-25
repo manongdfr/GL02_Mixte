@@ -9,37 +9,20 @@ const cli = require("@caporal/core").default;
 
 //import des modules
 const readme = require("./specs/readme.js");
+const getSalle = require("./specs/spec1.js");
 
 cli
   .version("cru-parser-cli")
   .version("0.01")
 
   // readme
-  .command("readme", "Read the README.txt file")
+  .command("readme", "Lecture du fichier README.txt")
   .action(({ args, options, logger }) => readme(logger))
 
-  // test
-  .command("check", "Check if <file> is a valid Cru file")
-  .argument("<file>", "The file to check with Cru parser")
-  .action(({ args, options, logger }) => {
-    fs.readFile(args.file, "utf8", function (err, data) {
-      if (err) {
-        return logger.warn(err);
-      }
-
-      var analyzer = new CRUParser(options.showTokenize, options.showSymbols);
-      let x = analyzer.parse(data);
-
-      console.log(x)
-
-      // if (analyzer.errorCount === 0) {
-      //   logger.info("The .cru file is a valid CRU file".green);
-      // } else {
-      //   logger.info("The .cru file contains error".red);
-      // }
-
-      // logger.debug(analyzer.parsedPOI);
-    });
-  });
+  // afficher les salles associées à un cours
+  .command("getSalle", "Détermine l'ensemble des salles où se déroule les cours d'une matière donnée")
+  .alias('SPEC1')
+	.argument('<ue>', 'Le nom de l\'UE à faire correspondre avec les salles')
+	.action(({args,options, logger}) => getSalle(args.ue, logger))
 
 cli.run();

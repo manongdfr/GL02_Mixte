@@ -1,169 +1,256 @@
-var CRU = require('./CRU');
+var CRU = require("./CRU");
 
 //CRU Parser
 
-var CRUParser = function(sTokenize, sParsedSymb){
-	// The list of POI parsed from the input file.
-	this.parsedCRU = []; // liste d'objets CRU
-	this.symb = ["+","","//"];
-	this.showTokenize = sTokenize;//booléen initié à l'instantiation. vrai = console.log(liste de ce qu'on a parsé, c.f. ligne 30 ). faux = affiche rien
-	this.showParsedSymbols = sParsedSymb;//booléen
-	this.errorCount = 0;
-}
+var CRUParser = function (sTokenize, sParsedSymb) {
+  //   // The list of POI parsed from the input file.
+  //   this.parsedCRU = []; // liste d'objets CRU
+  //   this.symb = ["+", "", "//"];
+  //   this.showTokenize = sTokenize; //booléen initié à l'instantiation. vrai = console.log(liste de ce qu'on a parsé, c.f. ligne 30 ). faux = affiche rien
+  //   this.showParsedSymbols = sParsedSymb; //booléen
+  //   this.errorCount = 0;
 
+  // The list of CRU parsed from the input file.
+  this.parsedCRU = [];
+  // this.symb = ["Seance2 S=4","+","P","H","S","//", "//\n\n"];
+  this.symb = ["Seance2 S=4", "P", "H", "S", "//", "//\n\n"];
+  this.showTokenize = sTokenize;
+  this.showParsedSymbols = sParsedSymb;
+  this.errorCount = 0;
+};
 
 // Parser procedure
 
 // tokenize : tranform the data input into a list
-// <eol> = CRLF
-CRUParser.prototype.tokenize = function(data){//data est un string de tout ce qui se trouve dans le fichier
-	var separator = /(\r\n|=|, )/;//le separateur est soit "\r\n" (retour à la ligne de windows), soit "=", soit ","
-	data = data.split(separator);//on prend le string, on le transforme en liste, avec comme séparateur ce qu'on a défini auparavant
-	data = data.filter((val, idx) => !val.match(separator));//on retire les séparateurs de la liste 					
-	console.log(data)
-	return data;//on retourne la liste de strings, sans les séparateurs.
-}
+CRUParser.prototype.tokenize = function (data) {
+  //seperator +
+  var separator = /(\r\n|[+]|=|,|[/][/]\r\n)/;
+  data = data.split(separator);
+
+  //seperator =
+  var separator = /(\r\n|=|,|[/][/]\r\n)/;
+  data = data.filter((val, idx) => !val.match(separator));
+  //Ignorer les 15 premiers inputs qui correspondent aux phrases d'explication du début de fichier
+  for (i = 0; i < 14; i++) {
+    this.next(data);
+  }
+  return data;
+};
 
 // parse : analyze data by calling the first non terminal rule of the grammar
-CRUParser.prototype.parse = function(data){
-	var tData = this.tokenize(data);//on appelle tokenize pour transformer le texte en liste
-	if(this.showTokenize){//
-		console.log(tData);
-	}
-	this.listPoi(tData);//on commence à analyser la liste. c.f. ligne 88
-}
+CRUParser.prototype.parse = function (data) {
+  var tData = this.tokenize(data);
+  if (this.showTokenize) {
+    console.log(tData);
+  }
+  this.listCru(tData); //on commence à analyser la liste. c.f. ligne 88
+};
 
 // Parser operand
 
-CRUParser.prototype.errMsg = function(msg, input){
-	this.errorCount++;//si error count est 0, le fichier est conforme.
-	console.log("Parsing Error ! on "+input+" -- msg : "+msg);
-}
+CRUParser.prototype.errMsg = function (msg, input) {
+  this.errorCount++; //si error count est 0, le fichier est conforme.
+  console.log("Parsing Error ! on " + input + " -- msg : " + msg);
+};
 
 // Read and return a symbol from input
-CRUParser.prototype.next = function(input){
-	var curS = input.shift();
-	if(this.showParsedSymbols){
-		console.log(curS);
-	}
-	return curS
-}
+CRUParser.prototype.next = function (input) {
+  var curS = input.shift();
+  if (this.showParsedSymbols) {
+    console.log(curS);
+  }
+  return curS;
+};
 
 // accept : verify if the arg s is part of the language symbols.
-CRUParser.prototype.accept = function(s){
-	var idx = this.symb.indexOf(s);
-	// index 0 exists
-	if(idx === -1){
-		this.errMsg("symbol "+s+" unknown", [" "]);
-		return false;
-	}
+CRUParser.prototype.accept = function (s) {
+  var idx = this.symb.indexOf(s);
+  // index 0 exists
+  if (idx === -1) {
+    this.errMsg("symbol " + s + " unknown", [" "]);
+    return false;
+  }
 
-	return idx;
-}
+  return idx;
+};
 
+/*  check : check whether the arg elt is on the head of the list
+	entrées: 				s = symbole à vérifier
+	input = data */
 
-
-// check : check whether the arg elt is on the head of the list
-//entrées: 				s = symbole à vérifier
-//						input = data
-
-CRUParser.prototype.check = function(s, input){
-
-//accept retourne: 	un int (index). = le premier symbole de input fait partie de la liste de symboles qu'on a défini auparavant. l'index est sa position dans la liste des symboles
-//					un bool (faux)  = pas reconnu dans la liste de symbole
-	if(this.accept(input[0]) == this.accept(s)){//si le mot à analyser est acceptable, et s (symbole entré) aussi. (ou non acceptable et s aussi)
-		return true;	
-	}
-	return false;
-}
+CRUParser.prototype.check = function (s, input) {
+  //accept retourne: 	un int (index). = le premier symbole de input fait partie de la liste de symboles qu'on a défini auparavant. l'index est sa position dans la liste des symboles
+  //					un bool (faux)  = pas reconnu dans la liste de symbole
+  if (this.accept(input[0]) == this.accept(s)) {
+    //si le mot à analyser est acceptable, et s (symbole entré) aussi. (ou non acceptable et s aussi)
+    return true;
+  }
+  return false;
+};
 
 // expect : expect the next symbol to be s.
-CRUParser.prototype.expect = function(s, input){
-	if(s == this.next(input)){
-		//next retourne le prochain symbole.
-		//next utilise "input.shift() sur la liste. important car shift élimine l'élément en tête de la liste."
-		//console.log("Reckognized! "+s)
-		return true;
-	}else{
-		this.errMsg("symbol "+s+" doesn't match", input);
-	}
-	return false;
-}
+CRUParser.prototype.expect = function (s, input) {
+  if (s == this.next(input)) {
+    //next retourne le prochain symbole.
+    //next utilise "input.shift() sur la liste. important car shift élimine l'élément en tête de la liste."
+    return true;
+  } else {
+    this.errMsg("symbol " + s + " doesn't match", input);
+  }
+  return false;
+};
 
-
+//
+//
 // Parser rules
-// <liste_poi> = *(<poi>) "$$"
-CRUParser.prototype.listPoi = function(input){
-	this.poi(input);//analyser le corps du texte (<poi>)
-	this.expect("$$", input);//lance une erreur si le symbole est pas recconu. "input" est la data / la liste
-}
+//
+//
 
-// <poi> = "START_POI" <eol> <body> "END_POI"
-// <cru> = "+SEANCE" <eol> <body> "END_POI"
-CRUParser.prototype.poi = function(input){
+// listCru
+CRUParser.prototype.listCru = function (input) {
+  this.cru(input); //analyser le corps du texte (<cru>)
+  this.expect("\r\n", input);
+};
 
-	if(this.check("START_POI", input)){
-		this.expect("START_POI", input);//skip un start POI, lancer une erreur si le start poi n'est pas trouvé
-		var args = this.body(input);//<body> = <name> <eol> <latlng> <eol> <optional>
-		//puis créer un nouveau POI à partir des données qu'on vient de parser avec this.body(input)
-		var p = new POI(args.sc, args.typ, args.pl, args.j, args.hd, args.hf, args.pl, args.sG, args.salle);//sc, typ, pl, j, hd, hf, sG, salle
-		this.note(input, p);
-		this.expect("END_POI",input);
-		this.parsedPOI.push(p);//ajouter dans la liste de POI parsé, l'objet qu'on vient de créer
-		if(input.length > 0){//continuer à parser si la liste est tojours pas vide
-			this.poi(input);
-		}
-		return true;
-	}else{
-		return false;
+// CRU
+CRUParser.prototype.cru = function (input) {
+  if (this.check("", input)) {
+    this.expect("", input); //skip un start CRU, lancer une erreur si le start cru n'est pas trouvé
+    var args = this.body(input); //contenu CRU
+	if(args == undefined) {
+		console.log("args undefined".red)
+		return true
 	}
 
-}
+    //puis créer un nouveau CRU à partir des données qu'on vient de parser avec this.body(input)
 
-// <body> = <name> <eol> <latlng> <eol> <optional>
-CRUParser.prototype.body = function(input){
-	var nm = this.name(input);
-	var ltlg = this.latlng(input);
-	return { nm: nm, lt: ltlg.lat, lg: ltlg.lng }; //sc, typ, pl, j, hd, hf, sG, salle
-}
+	console.log("kjbqdvkbzlqkbvzlkqbvzl".blue)
+	console.log(input[3]);
 
-// <name> = "name: " 1*WCHAR
-CRUParser.prototype.name = function(input){
-	this.expect("name",input)
-	var curS = this.next(input);
-	if(matched = curS.match(/[\wàéèêîù'\s]+/i)){
-		return matched[0];
-	}else{
-		this.errMsg("Invalid name", input);
-	}
-}
+    var p = new CRU(
+    //   args.ue,
+    //   args.statut,
+    //   args.type,
+    //   args.place,
+    //   args.jour,
+    //   args.heureDebut,
+    //   args.heureFin,
+    //   args.sousgroupe,
+    //   args.salle
+    );
 
-// <latlng> = "latlng: " ?"-" 1*3DIGIT "." 1*DIGIT", " ?"-" 1*3DIGIT "." 1*DIGIT
-CRUParser.prototype.latlng = function(input){
-	this.expect("latlng",input)
-	var curS = this.next(input);
-	if(matched = curS.match(/(-?\d+(\.\d+)?);(-?\d+(\.\d+)?)/)){//format de la longitude/latitude. \d est un double (ou digit, jsp). "\." est un point. "-?" veut dire que "-" est non obligatoire je pense. pour les valeurs négatives
-		return { lat: matched[1], lng: matched[3] };
-	}else{
-		this.errMsg("Invalid latlng", input);
-	}
-}
+    this.note(input, p);
+    this.expect("//\n\n", input);
+    this.parsedCRU.push(p); //ajouter dans la liste de CRU parsé, l'objet qu'on vient de créer
+    if (input.length > 12) {
+      //continuer à parser si la liste est tojours pas vide
+      if (input[1] === "+") {
+        this.cru(input);
+      } else {
+        console.log("fin de fichier".blue);
+      }
+    }
+    return true;
+  } else {
+    return false;
+  }
+};
 
-// <optional> = *(<note>)
-// <note> = "note: " "0"/"1"/"2"/"3"/"4"/"5"
-CRUParser.prototype.note = function (input, curPoi){
-	if(this.check("note", input)){
-		this.expect("note", input);
-		var curS = this.next(input);
-		if(matched = curS.match(/[12345]/)){
-			curPoi.addRating(matched[0]);
-			if(input.length > 0){
-				this.note(input, curPoi);
-			}
-		}else{
-			this.errMsg("Invalid note");
-		}	
-	}
-}
+// contenu cru récupérés
+CRUParser.prototype.body = function (input) {
+    console.log(input);
+
+  return {
+    ue: ue,
+    statut: statut,
+    typeS: typeS,
+    NbPlace: NbPlace,
+    jour: jour,
+    heureDebut: heureDebut,
+    heureFin: heureFin,
+    sousGroupe: sousGroupe,
+    numSalle: numSalle,
+  };
+};
+
+//Nom de l'UE
+CRUParser.prototype.ue = function (input) {
+  this.expect("+", input);
+  var curS = this.next(input);
+  if ((matched = curS.match(/[A-Z0-9]{2,7}/g))) {
+    return matched[0];
+  } else {
+    this.errMsg("Invalid UE name", input);
+  }
+};
+
+//Statut de l'UE toujours = 1
+CRUParser.prototype.statut = function (input) {
+  if (this.expect("1", input) === true) {
+    return "1";
+  } else {
+    this.errMsg("Invalid statut not equal 1", input);
+  }
+};
+
+//Type de cours
+CRUParser.prototype.type = function (input) {
+  var curS = input[0];
+  if ((matched = curS.match(/([A-Z][0-9])/g))) {
+    return matched[0];
+  } else {
+    this.errMsg("Invalid type", input);
+  }
+};
+
+//Nombre de places
+CRUParser.prototype.place = function (input) {
+  this.next(input);
+  this.expect("P", input);
+  var curS = this.next(input);
+  if ((matched = curS.match(/([0-9]{1,3})/))) {
+    return matched[0];
+  } else {
+    this.errMsg("Invalid number places", input);
+  }
+};
+
+//Horaire
+CRUParser.prototype.horaire = function (input) {
+  this.expect("H", input);
+  var curS = input[0];
+  if (
+    (matched = curS.match(
+      /([L]|[M][A]|[M][E]|[J]|[V]|[S])([" "])([0-9]{1,2}:[0-9]{1,2})(-)([0-9]{1,2}:[0-9]{1,2})/g
+    ))
+  ) {
+    matched = matched[0].split(/( )|-/);
+    return { jour: matched[0], heureDebut: matched[2], heureFin: matched[4] };
+  } else {
+    this.errMsg("Invalid horaire", input);
+  }
+};
+
+//Sous-groupe (F+ une lettre ou un chiffre)
+CRUParser.prototype.sousgroupe = function (input) {
+  var curS = this.next(input);
+  curS = this.next(input);
+  if ((matched = curS.match(/([F][A-Z0-9])/g))) {
+    return matched[0];
+  } else {
+    this.errMsg("Invalid sous groupe", input);
+  }
+};
+
+//Salle
+CRUParser.prototype.salle = function (input) {
+  this.expect("S", input);
+  var curS = this.next(input);
+  if ((matched = curS.match(/[A-Z0-9]{4}/g))) {
+    return matched[0];
+  } else {
+    this.errMsg("Invalid salle", input);
+  }
+};
 
 module.exports = CRUParser;
