@@ -132,7 +132,7 @@ CRUParser.prototype.cru = function (input) {
       }
     } else {
       //console.log("Fin de fichier");
-      console.log(this.parsedCRU);
+      // console.log(this.parsedCRU);
     }
     return true;
   } else {
