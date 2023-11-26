@@ -22,7 +22,7 @@ cli
   // afficher les salles associées à un cours
   .command("getSalle", "Détermine l'ensemble des salles où se déroule les cours d'une matière donnée")
   .alias('SPEC1')
-	.argument('<ue>', 'Le nom de l\'UE à faire correspondre avec les salles')
-	.action(({args,options, logger}) => getSalle(args.ue, logger))
+	.argument('<needle>', 'Le nom de l\'UE à faire correspondre avec les salles')
+	.action(({args,options, logger}) => getSalle(args.needle, logger))
 
 cli.run();
