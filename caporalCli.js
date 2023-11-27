@@ -10,6 +10,7 @@ const cli = require("@caporal/core").default;
 //import des modules
 const readme = require("./specs/readme.js");
 const getSalle = require("./specs/spec1.js");
+const getCapaciteMax = require("./specs/spec4.js");
 
 cli
   .version("cru-parser-cli")
