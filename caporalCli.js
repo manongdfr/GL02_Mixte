@@ -25,4 +25,9 @@ cli
 	.argument('<needle>', 'Le nom de l\'UE à faire correspondre avec les salles')
 	.action(({args,options, logger}) => getSalle(args.needle, logger))
 
+  // afficher la capacité maximale des salles
+  .command("getCapaciteMax", "Détermine la capacité maximale d'une salle donnée")
+  .alias('SPEC4')
+  .argument('<needle>', 'Le nom de la salle à déterminer')
+  .action(({ags, options, logger}) => getCapaciteMax(ags.needle, logger))
 cli.run();
