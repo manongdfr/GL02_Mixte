@@ -15,8 +15,13 @@ Manuel & README | GL02_Mixte - Sujet A
 ### Commandes
 
 ---------------------------------------------------------
-    readme : Afficher le manuel dans la console
+    readme    : Afficher le manuel dans la console
     $ node caporalCli.js readme
+---------------------------------------------------------
+    getSalle  : Afficher les salles d'une matière donnée
+    paramètre : ue - nom d'UE (exemple : GL02)
+
+    $ node caporalCli.js getSalle ue
 ---------------------------------------------------------
 
 

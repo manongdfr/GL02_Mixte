@@ -14,31 +14,39 @@ function spec1(args, logger) {
         analyzer = new CRUParser();
         analyzer.parse(data);
 
+
         let CRUAFiltrer = analyzer.parsedCRU;
         let CRUFiltres = [];
+        let uniqueCru = [];
 
+        //à filtrer
         for (let i = 0; i < CRUAFiltrer.length; i++) {
-          let ueCurrent = analyzer.parsedCRU[i].ue
+          let ueCurrent = analyzer.parsedCRU[i].ue;
           if (ueCurrent == args) {
-            CRUFiltres.push(CRUAFiltrer[i]);
+            CRUFiltres.push(CRUAFiltrer[i].salle);
+            
+            //!\ filtrer les doubons /!\
+            uniqueCru = CRUFiltres.filter(function (value, index, array) {
+                return array.indexOf(value) === index;
+            });
           }
         }
+        
 
-
-
-        if (CRUFiltres.length > 0) {
-          for (let i = 0; i < CRUFiltres.length; i++) {
+        //answer
+        if (uniqueCru.length > 0) {
+          for (let i = 0; i < uniqueCru.length; i++) {
             console.log(
               "Les cours de l'UE ",
               args,
               " se déroulent dans les salles suivantes :"
             );
-            for (i = 0; i < CRUFiltres.length; i++) {
-              console.log("---- ", CRUFiltres[i].salle, "----");
-            }
+              for (i = 0; i < uniqueCru.length; i++) {
+                console.log("---- ", uniqueCru[i], " ----");
+              }
           }
         } else {
-          ("ce cours n'a pas de salle attribué");
+          //logger.warn("ce cours n'a pas de salle attribuée");
         }
       }
     );
