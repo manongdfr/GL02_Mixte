@@ -30,5 +30,5 @@ cli
   .command("getCapaciteMax", "Détermine la capacité maximale d'une salle donnée")
   .alias('SPEC4')
   .argument('<needle>', 'Le nom de la salle à déterminer')
-  .action(({ags, options, logger}) => getCapaciteMax(ags.needle, logger))
+  .action(({args, options, logger}) => getCapaciteMax(args.needle, logger))
 cli.run();

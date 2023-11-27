@@ -3,6 +3,7 @@ const CRUParser = require("../CRUParser");
 let tabAlph = ["AB", "CD", "EF", "GH", "IJ", "KL", "MN", "OP", "QR", "ST"];
 
 function spec4(args, logger) {
+    console.log(args);
     let fini = false;
     let placeMax = 0;
     while (fini === false) {
@@ -48,4 +49,6 @@ function spec4(args, logger) {
         fini = true;
     }
 }
+
+
 module.exports = spec4;
