@@ -4,6 +4,9 @@ const { Console } = require("console");
 let tabAlph = ["AB", "CD", "EF", "GH", "IJ", "KL", "MN", "OP", "QR", "ST"];
 
 function spec6(args, logger) {
+    if (fullDayToNum(args) == -1){
+        return;
+    }
     var crulist = []
     let promises = [];
     for (let i = 0; i < tabAlph.length; i++) {
@@ -43,7 +46,7 @@ function spec6(args, logger) {
         }));
     }
     Promise.all(promises).then(() => {
-        //console.log(crulist)
+        
         let dailyHoursArray = [0,0,0,0,0]
 
         let salleMap = new Map()
@@ -55,34 +58,27 @@ function spec6(args, logger) {
                 let startTime = currentCRU.horaire.matched[2];
                 let endTime = currentCRU.horaire.matched[4];
                 dailyHoursArray[dayToNum(cruDay)] += cruDuration(startTime,endTime);
-
-                if(salleMap.has(crulist[i].salle)){
-                    salleMap.set(crulist[i].salle, salleMap.get(crulist[i].salle) + cruDuration(startTime,endTime))
+                
+                if(salleMap.has(crulist[i][j].salle)){
+                    //console.log(salleMap.get(crulist[i][j].salle))
+                    salleMap.set(crulist[i][j].salle, salleMap.get(crulist[i][j].salle) + cruDuration(startTime,endTime))
                 }else{
-                    salleMap.set(crulist[i].salle,cruDuration(startTime,endTime))
+                    salleMap.set(crulist[i][j].salle,cruDuration(startTime,endTime))
                 }
-
-                //console.log(dailyHoursArray)
             }
         }
-        
-        
-                
-        for (let j = 0; j< crulist.length; j++){
-            let currentCRU = crulist[i];
-            //
-        }
+        // réarranger le map
+        let sortedArray = Array.from(salleMap).sort((a, b) => a[1] > b[1] ? 1 : -1);
+        let sortedMapByValue = new Map(sortedArray);
+
         //montrer le taux d'occupation de la salle
         //8 à 20 heures = 12 heures * 5 jours = 60 heures
         console.log(`Occupation de la salle le ${args}:`)
-        salleMap.forEach((value, key) => {
-            console.log(`${key}: ${((value/12)*100).toFixed(1)}`);
+        sortedMapByValue.forEach((value, key) => {
+            console.log(`${key}: ${((value/12)*100).toFixed(1)}%`);
         });
-        /*
-        for (j = 0; j < salleMap.size; j++){
-            console.log(`${salleMap[1]} : ${((dailyHoursArray[j]/12)*100).toFixed(1)}%`)
-        }
-        */
+        
+        
     });
 }
 
@@ -105,6 +101,8 @@ function spec6(args, logger) {
             return 3;
         case "V":
             return 4;
+        case "S":
+            return 5;
     }
   }
 
@@ -120,11 +118,13 @@ function spec6(args, logger) {
             return "jeudi";
         case 4:
             return "vendredi";
+        case 5:
+            return "samedi";
     }
     
   }
-  function fullDayToNum(num){
-    switch(num){
+  function fullDayToNum(day){
+    switch(day){
         case "lundi":
             return 0;
         case "mardi":
@@ -135,8 +135,15 @@ function spec6(args, logger) {
             return 3;
         case "vendredi":
             return 4;
+        case "samedi":
+            return 5;
+        default:
+            console.log(`Veuillez rentrer un jour de la semaine valide (lundi | mardi | mercredi | jeudi | vendredi | samedi)`)
+            return -1;
     }
-  }
+}
+
+
   
 
 
