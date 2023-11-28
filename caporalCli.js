@@ -11,6 +11,7 @@ const cli = require("@caporal/core").default;
 const readme = require("./specs/readme.js");
 const getSalle = require("./specs/spec1.js");
 const getCapaciteMax = require("./specs/spec4.js");
+const getOccupation = require("./specs/spec6.js");
 
 cli
   .version("cru-parser-cli")
@@ -31,4 +32,11 @@ cli
   .alias('SPEC4')
   .argument('<needle>', 'Le nom de la salle à déterminer')
   .action(({args, options, logger}) => getCapaciteMax(args.needle, logger))
+
+  // afficher le taux d'occupation des salles selectionnés
+  .command("getOccupation", "Détermine le taux d'occupation des salles selectionnés")
+  .alias('SPEC6')
+  .argument('<needle>',"Le nom de la salle à connaitre le taux d'occupation séparé par des virgules")
+  .action(({args, options, logger}) => getOccupation(args.needle, logger))
+
 cli.run();
