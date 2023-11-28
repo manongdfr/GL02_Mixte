@@ -39,33 +39,36 @@ function spec6(args, logger) {
     }
     Promise.all(promises).then(() => {
         //console.log(crulist)
+        let dailyHoursArray = [0,0,0,0,0]
         for (let i= 0; i< crulist.length; i++){
             for (let j = 0; j< crulist[i].length; j++){
-                let startTime = crulist[i][j].horaire.matched[2];
-                let endTime = crulist[i][j].horaire.matched[4];
-                console.log(cruDuration(startTime,endTime));
+                let currentCRU = crulist[i][j]
+                let cruDay = currentCRU.horaire.matched[0]
+                let startTime = currentCRU.horaire.matched[2];
+                let endTime = currentCRU.horaire.matched[4];
+                dailyHoursArray[dayToNum(cruDay)] += cruDuration(startTime,endTime);
+                //console.log(dailyHoursArray)
             }
         }
         
-        let dailyHoursArray = new Array(5)
+        
                 
         for (let j = 0; j< crulist.length; j++){
             let currentCRU = crulist[i];
-            //dailyHoursArray[dayToNum(currentCRU)] += cruDuration(currentCRU);
+            //
         }
         //montrer le taux d'occupation de la salle
         //8 à 20 heures = 12 heures * 5 jours = 60 heures
         for (j = 0; j < 5; j++){
-            console.log(`Occupation de la salle ${args} jour ${j} de la semaine: ${dailyHoursArray[i]/60}`)
+            console.log(`Occupation de la salle ${args} le ${numToDay(j)} : ${((dailyHoursArray[j]/12)*100).toFixed(1)}%`)
         }
     });
 }
 
-  function cruDuration(startTime,endTime){
-    let start = parseInt(startTime[0])*10+parseInt(startTime[1]);
-    let end = console.log(parseInt(endTime[0])*10+parseInt(endTime[1]));
-    console.log(`lmao ${startTime} : ${endTime}}`)
-    let hourCount = end-start;
+  function cruDuration(startString,endString){
+    var start = startString.split(':').map(Number);
+    var end = endString.split(':').map(Number);
+    let hourCount = end[0]-start[0];
     return hourCount
   }
 
@@ -87,15 +90,15 @@ function spec6(args, logger) {
   function numToDay(num){
     switch(num){
         case 0:
-            return "L";
+            return "Lundi";
         case 1:
-            return "MA";
+            return "Mardi";
         case 2:
-            return "ME";
+            return "Mercredi";
         case 3:
-            return "J";
+            return "Jeudi";
         case 4:
-            return "V";
+            return "Vendredi";
     }
   }
   
