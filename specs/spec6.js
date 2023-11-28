@@ -23,10 +23,15 @@ function spec6(args, logger) {
                 let uniqueCru = [];
         
                 for (let j = 0; j < CRUAFiltrer.length; j++) {
-                let salleCurrent = analyzer.parsedCRU[j].salle;
-                if (salleCurrent == args) {
-                    filteredCru.push(CRUAFiltrer[j]);
-                }
+                    if(typeof CRUAFiltrer[j].horaire != 'undefined'){
+                        let jourCurrent = CRUAFiltrer[j].horaire.matched[0];
+                        if (dayToNum(jourCurrent) == fullDayToNum(args)) {
+                            filteredCru.push(CRUAFiltrer[j]);
+                        }
+                    }
+                    else{
+                        //console.log(`Attention, un CRU contient une horaire vide pour l'UE:${CRUAFiltrer[i].ue} }` )
+                    }
                 }
                 uniqueCru = filteredCru.filter(function (value, index, array) {
                 return array.indexOf(value) === index;
@@ -40,13 +45,23 @@ function spec6(args, logger) {
     Promise.all(promises).then(() => {
         //console.log(crulist)
         let dailyHoursArray = [0,0,0,0,0]
+
+        let salleMap = new Map()
         for (let i= 0; i< crulist.length; i++){
             for (let j = 0; j< crulist[i].length; j++){
+                
                 let currentCRU = crulist[i][j]
                 let cruDay = currentCRU.horaire.matched[0]
                 let startTime = currentCRU.horaire.matched[2];
                 let endTime = currentCRU.horaire.matched[4];
                 dailyHoursArray[dayToNum(cruDay)] += cruDuration(startTime,endTime);
+
+                if(salleMap.has(crulist[i].salle)){
+                    salleMap.set(crulist[i].salle, salleMap.get(crulist[i].salle) + cruDuration(startTime,endTime))
+                }else{
+                    salleMap.set(crulist[i].salle,cruDuration(startTime,endTime))
+                }
+
                 //console.log(dailyHoursArray)
             }
         }
@@ -59,9 +74,15 @@ function spec6(args, logger) {
         }
         //montrer le taux d'occupation de la salle
         //8 à 20 heures = 12 heures * 5 jours = 60 heures
-        for (j = 0; j < 5; j++){
-            console.log(`Occupation de la salle ${args} le ${numToDay(j)} : ${((dailyHoursArray[j]/12)*100).toFixed(1)}%`)
+        console.log(`Occupation de la salle le ${args}:`)
+        salleMap.forEach((value, key) => {
+            console.log(`${key}: ${((value/12)*100).toFixed(1)}`);
+        });
+        /*
+        for (j = 0; j < salleMap.size; j++){
+            console.log(`${salleMap[1]} : ${((dailyHoursArray[j]/12)*100).toFixed(1)}%`)
         }
+        */
     });
 }
 
@@ -90,15 +111,30 @@ function spec6(args, logger) {
   function numToDay(num){
     switch(num){
         case 0:
-            return "Lundi";
+            return "lundi";
         case 1:
-            return "Mardi";
+            return "mardi";
         case 2:
-            return "Mercredi";
+            return "mercredi";
         case 3:
-            return "Jeudi";
+            return "jeudi";
         case 4:
-            return "Vendredi";
+            return "vendredi";
+    }
+    
+  }
+  function fullDayToNum(num){
+    switch(num){
+        case "lundi":
+            return 0;
+        case "mardi":
+            return 1;
+        case "mercredi":
+            return 2;
+        case "jeudi":
+            return 3;
+        case "vendredi":
+            return 4;
     }
   }
   
