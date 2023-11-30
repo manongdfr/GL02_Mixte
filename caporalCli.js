@@ -39,4 +39,11 @@ cli
   .argument('<needle>',"Le nom de la salle à connaitre le taux d'occupation séparé par des virgules")
   .action(({args, options, logger}) => getOccupation(args.needle, logger))
 
+  // afficher le nombre de salles de classe pour une capacité d'accueil donnée
+  .command("getNbSalleCapacite", "Détermine le nombre de salles par capacité d'accueil maximale")
+  .alias('SPEC7')
+  .argument('<needle>',"Pas d'argument car on veut le nb de salles correspondant à chaque capacité")
+  .action(({args, options, logger}) => getNbSalleCapacite(args.needle, logger))
+
+
 cli.run();
