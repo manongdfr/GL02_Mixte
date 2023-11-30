@@ -284,11 +284,6 @@ CRUParser.prototype.place = function (input) {
   }
 };
 
-//Horaire
-CRUParser.prototype.horaire = function (input) {
-  this.expect("H", input);
-};
-
 //Sous-groupe (F+ une lettre ou un chiffre)
 CRUParser.prototype.sousgroupe = function (input) {
   var curS = this.next(input);
