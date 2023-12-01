@@ -13,6 +13,7 @@ const getSalle = require("./specs/spec1.js");
 const getSallesLibres = require("./specs/spec2.js");
 const getCapaciteMax = require("./specs/spec4.js");
 const getOccupation = require("./specs/spec6.js");
+const getNbSalleCapacite = require("./specs/spec7.js")
 
 cli
   .version("cru-parser-cli")
@@ -50,8 +51,7 @@ cli
   // afficher le nombre de salles de classe pour une capacité d'accueil donnée
   .command("getNbSalleCapacite", "Détermine le nombre de salles par capacité d'accueil maximale")
   .alias('SPEC7')
-  .argument('<needle>',"Pas d'argument car on veut le nb de salles correspondant à chaque capacité")
-  .action(({args, options, logger}) => getNbSalleCapacite(args.needle, logger))
+  .action(({options, logger}) => getNbSalleCapacite(logger))
 
 
 cli.run();
