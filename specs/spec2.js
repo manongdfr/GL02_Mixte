@@ -44,88 +44,105 @@ function spec2(args, logger) {
     return;
   }
 
-  for (let i = 0; i < tabAlph.length; i++) {
-    fs.readFile(
-      "SujetA_data/" + tabAlph[i] + "/edt.cru",
-      "utf8",
-      function (err, data) {
+  // Tableau de promesses pour chaque fichier à traiter
+  let promises = [];
+
+  // Fonction qui lit et analyse un fichier, renvoyant une promesse
+  function readAndParseFile(filePath) {
+    return new Promise((resolve, reject) => {
+      fs.readFile(filePath, "utf8", (err, data) => {
         if (err) {
-          return logger.warn(err);
+          reject(err);
+        } else {
+          // Initialiser l'analyseur CRU avec les données du fichier
+          const analyzer = new CRUParser();
+          analyzer.parse(data);
+
+          // Extraire les informations pertinentes du CRU et les mettre dans un tableau
+          const CRUAFiltrer = analyzer.parsedCRU;
+
+          const tab = CRUAFiltrer.map(({ horaire }) => [horaire]);
+
+          // Résoudre la promesse avec le tableau
+          resolve(tab);
         }
-        analyzer = new CRUParser();
-        analyzer.parse(data);
-
-        if ((analyzer.errorCount = 0)) {
-          logger.info("Le fichier .cru contient une erreur".red);
-          return;
-        }
-
-        //ensemble des salles
-        let sallesAFiltrer = analyzer.parsedCRU;
-        let sallesFiltres = []
-
-        //tableau salles
-        for (let i = 0; i < sallesAFiltrer.length; i++) {
-          sallesFiltres.push(sallesAFiltrer[i].salle);
-
-          //!\ filtrer les doubons /!\
-          uniqueSalle = sallesFiltres.filter(function (value, index, array) {
-            return array.indexOf(value) === index;
-          });
-        }
-
-        sallesAFiltrer.forEach((e) => {
-            if(e.statut !== undefined){
-                if (
-                //   e.horaire.matched[0] !== undefined &&
-                  e.horaire.matched[0] === args.jour &&
-                  compareDates(args.heureDebut, e.horaire.matched[2]) >= 0 &&
-                  compareDates(args.heureFin, e.horaire.matched[4]) <= 0
-                ) {
-                let uniqueSalle = sallesFiltres.filter(function (value, index, array) {
-                         return array.indexOf(value) === index;
-                         });
-                  console.log("Salles disponibles à ces horaires : ");
-                  logger.info(uniqueSalle.join(', '))
-                }
-            }
-        });
-      }
-      //   if (
-      //     horaire.matched[0] === args.jour &&
-      //     compareDates(args.heureDebut, horaire.matched[2]) >= 0 &&
-      //     compareDates(args.heureFin, horaire.matched[4]) <= 0
-      //   ) {
-      //     // sallesDispo = sallesDispo.filter(
-      //     //   (salle) => salle !== creneau.salle
-      //     // );
-      //     console.log(uniqueSalle);
-      //   }
-      // });
-      // logger.info("Salles disponibles à ces horaires: ");
-      // logger.info(sallesDispo.join(", "));
-      //   }
-    );
+      });
+    });
   }
 
-  //prends args hDébut hFin, return 1 si Début > Fin, 0 si équivalent, -1 Début < Fin
-  function compareDates(hour1, hour2) {
-    let d1 = hour1.split(":");
-    let d2 = hour2.split(":");
-    if (parseInt(d1[0]) < parseInt(d2[0])) {
+  // Tableau qui contiendra les données sans doublons
+  let uniqueSalle = [];
+
+  // Créer une promesse pour chaque fichier à traiter
+  for (let i = 0; i < tabAlph.length; i++) {
+    promises.push(readAndParseFile("SujetA_data/" + tabAlph[i] + "/edt.cru"));
+  }
+
+  Promise.all(promises)
+    .then((results) => {
+      // Aplatir le tableau de tableaux en un seul tableau
+      uniqueSalle = results.flat();
+
+      uniqueSalle = removeDuplicates(uniqueSalle);
+
+      let final = [];
+
+      uniqueSalle.forEach((e) => {
+        if (e && e[0] && e[0].matched !== undefined) {
+          if (
+            //   e.horaire.matched[0] !== undefined &&
+            e[0].matched[0] === args.jour &&
+            compareDates(args.heureDebut, e[0].matched[2]) >= 0 &&
+            compareDates(args.heureFin, e[0].matched[4]) <= 0
+          ) {
+            final = uniqueSalle.filter(function (value, index, array) {
+              return array.indexOf(value) === index;
+            });
+          }
+        }
+      });
+
+      // console.log(finalTab);
+      console.log("Salles disponibles à ces horaires : ");
+      // console.log(final.map(item => item))
+      // logger.info(final.map(item => item.nom).join(", "));
+    })
+    .catch((error) => {
+      console.error(error);
+    });
+}
+
+//prends args hDébut hFin, return 1 si Début > Fin, 0 si équivalent, -1 Début < Fin
+function compareDates(hour1, hour2) {
+  let d1 = hour1.split(":");
+  let d2 = hour2.split(":");
+
+  if (parseInt(d1[0]) < parseInt(d2[0])) {
+    return 1;
+  } else if (parseInt(d1[0]) > parseInt(d2[0])) {
+    return -1;
+  } else {
+    if (parseInt(d1[1]) < parseInt(d2[1])) {
       return 1;
-    } else if (parseInt(d1[0]) > parseInt(d2[0])) {
+    } else if (parseInt(d1[1]) > d2[1]) {
       return -1;
     } else {
-      if (parseInt(d1[1]) < parseInt(d2[1])) {
-        return 1;
-      } else if (parseInt(d1[1]) > d2[1]) {
-        return -1;
-      } else {
-        return 0;
-      }
+      return 0;
     }
   }
+}
+
+function removeDuplicates(data) {
+  const uniqueValues = new Map();
+
+  return data.filter((item) => {
+    if (!uniqueValues.has(item)) {
+      uniqueValues.set(item, true);
+      return true;
+    }
+
+    return false;
+  });
 }
 
 module.exports = spec2;
