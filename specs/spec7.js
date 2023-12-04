@@ -57,6 +57,7 @@ function spec7(logger) {
             });
             console.log("Voilà un classement du nombres de salles de classes par capacité maximale : ")
             console.log(capacityCount);
+            console.log(tab1)
         })
         .catch((error) => {
             console.error(error);
@@ -66,22 +67,23 @@ function spec7(logger) {
 
 
 function removeDuplicates(matrix) {
-    // Utiliser un ensemble pour stocker les valeurs uniques de la première colonne
-    const uniqueFirstColumnValues = new Set();
+    const capacityMap = {};
 
-    // Filtrer la matrice pour n'inclure que des lignes où la première colonne est unique
-    const uniqueMatrix = matrix.filter(([firstColumnValue]) => {
-        // Si la valeur de la première colonne n'est pas déjà dans l'ensemble, l'ajouter et le conserver
-        if (!uniqueFirstColumnValues.has(firstColumnValue)) {
-            uniqueFirstColumnValues.add(firstColumnValue);
-            return true;
+    matrix.forEach(([salle, capacity]) => {
+        const currentCapacity = parseInt(capacity);
+        if (!capacityMap[salle] || currentCapacity > capacityMap[salle]) {
+            capacityMap[salle] = currentCapacity;
         }
-
-        // Sinon, la ligne est un doublon, la filtrer
-        return false;
     });
+    
 
+    const uniqueMatrix = Object.entries(capacityMap).map(([salle, capacity]) => [
+        salle || 'UndefinedSalle',  // Provide a default value for undefined salle
+        capacity.toString(),
+    ]);
     return uniqueMatrix;
 }
+
+
 
 module.exports = spec7;
