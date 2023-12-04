@@ -61,7 +61,7 @@ function spec2(args, logger) {
           // Extraire les informations pertinentes du CRU et les mettre dans un tableau
           const CRUAFiltrer = analyzer.parsedCRU;
 
-          const tab = CRUAFiltrer.map(({ horaire }) => [horaire]);
+          const tab = CRUAFiltrer.map(({ horaire, salle }) => [horaire, salle]);
 
           // Résoudre la promesse avec le tableau
           resolve(tab);
@@ -88,24 +88,30 @@ function spec2(args, logger) {
       let final = [];
 
       uniqueSalle.forEach((e) => {
-        if (e && e[0] && e[0].matched !== undefined) {
+        if (
+          e &&
+          e[0] &&
+          e[0].matched &&
+          e[0].matched[2] &&
+          e[0].matched[4] !== undefined
+        ) {
           if (
             //   e.horaire.matched[0] !== undefined &&
             e[0].matched[0] === args.jour &&
             compareDates(args.heureDebut, e[0].matched[2]) >= 0 &&
             compareDates(args.heureFin, e[0].matched[4]) <= 0
           ) {
-            final = uniqueSalle.filter(function (value, index, array) {
-              return array.indexOf(value) === index;
-            });
+            final.push(e);
           }
         }
       });
 
-      // console.log(finalTab);
-      console.log("Salles disponibles à ces horaires : ");
-      // console.log(final.map(item => item))
-      // logger.info(final.map(item => item.nom).join(", "));
+      if(final.length == 0){
+        logger.info('pas de salle disponible pour les horaires demandées'.blue)
+      } else {
+        console.log("Salles disponibles à ces horaires : ".blue);
+        logger.info(final.map((item) => item[1]).join(", "));
+      }
     })
     .catch((error) => {
       console.error(error);
