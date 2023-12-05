@@ -11,6 +11,7 @@ const cli = require("@caporal/core").default;
 const readme = require("./specs/readme.js");
 const getSalle = require("./specs/spec1.js");
 const getSallesLibres = require("./specs/spec2.js");
+const getCreneauDispo = require("./specs/spec3.js")
 const getCapaciteMax = require("./specs/spec4.js");
 const getOccupation = require("./specs/spec6.js");
 const getNbSalleCapacite = require("./specs/spec7.js")
@@ -36,6 +37,12 @@ cli
 	.argument('<heureFin>', 'Heure de début pour la recherche de salle avec interval de 30 minutes.')
 	.argument('<jour>', 'Jour de la semaine pour la recherche (L,MA,ME,J,V,S).')
 	.action(({ args, logger }) => getSallesLibres(args, logger))
+
+  // afficher la capacité maximale des salles
+  .command("getCreneauDispo", "Déterminer les créneaux disponible d'une salle donnée")
+  .alias('SPEC3')
+  .argument('<needle>', 'L ID de la salle en question')
+  .action(({args, options, logger}) => getCreneauDispo(args.needle, logger))
 
   // afficher la capacité maximale des salles
   .command("getCapaciteMax", "Détermine la capacité maximale d'une salle donnée")
