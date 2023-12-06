@@ -3,13 +3,15 @@ var CRU = require("./CRU");
 var CRUParser = function (sTokenize, sParsedSymb) {
   // The list of CRU parsed from the input file.
   this.parsedCRU = [];
-  this.symb = ["Seance2 S=4", "+", "//\n", "P", "H", "S", "//", "//\n\n"]; //problème dans la "division"
+  this.symb = ["Seance2 S=4", "+", "//\n", "P", "H", "S", "//", "//\n\n"];
   this.showTokenize = sTokenize;
   this.showParsedSymbols = sParsedSymb;
   this.errorCount = 0;
 };
 
+//
 // Parser procedure
+//
 
 // tokenize : tranform the data input into a list
 CRUParser.prototype.tokenize = function (data) {
@@ -22,7 +24,6 @@ CRUParser.prototype.tokenize = function (data) {
   for (i = 0; i < 14; i++) {
     this.next(data);
   }
-  //console.log(data);
 
   return data;
 };
@@ -33,14 +34,15 @@ CRUParser.prototype.parse = function (data) {
   if (this.showTokenize) {
     console.log(tData);
   }
-  this.listCru(tData); //on commence à analyser la liste. c.f. ligne 88
+  this.listCru(tData); 
 };
 
+//
 // Parser operand
+//
 
 CRUParser.prototype.errMsg = function (msg, input) {
-  this.errorCount++; //si error count est 0, le fichier est conforme.
-  // console.log("Parsing Error ! on " + input + " -- msg : " + msg);
+  this.errorCount++; 
 };
 
 // Read and return a symbol from input
@@ -64,13 +66,8 @@ CRUParser.prototype.accept = function (s) {
   return idx;
 };
 
-/*  check : check whether the arg elt is on the head of the list
-	entrées: 				s = symbole à vérifier
-	input = data */
-
+//  check : check whether the arg elt is on the head of the list
 CRUParser.prototype.check = function (s, input) {
-  //accept retourne: 	un int (index). = le premier symbole de input fait partie de la liste de symboles qu'on a défini auparavant. l'index est sa position dans la liste des symboles
-  //					un bool (faux)  = pas reconnu dans la liste de symbole
   if (this.accept(input[0]) == this.accept(s)) {
     //si le mot à analyser est acceptable, et s (symbole entré) aussi. (ou non acceptable et s aussi)
     return true;
@@ -144,15 +141,13 @@ CRUParser.prototype.cru2 = function (input, UE) {
       args.sousgroupe,
       args.salle
     );
-    //console.log(p);
+
     this.parsedCRU.push(p);
-    //console.log("Nombre input = ", input.length);
     if (input.length > 12) {
-      //console.log("Gros test = ", input[1]);
       if (input[1] === "+") {
         this.cru(input);
       } else {
-        //console.log("Pas une nouvelle UE = ", UE);
+        //cru2 = sans UE needle
         this.cru2(input, UE);
       }
     } else {
@@ -183,6 +178,7 @@ CRUParser.prototype.body = function (input) {
   };
 };
 
+//contenu cru sans UE
 CRUParser.prototype.bodySansUe = function (input) {
   var statut = this.statut(input);
   var type = this.type(input);

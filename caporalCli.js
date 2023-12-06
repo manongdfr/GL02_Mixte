@@ -12,6 +12,7 @@ const cli = require("@caporal/core").default;
 const readme = require("./specs/readme.js");
 const getSalle = require("./specs/spec1.js");
 const getSallesLibres = require("./specs/spec2.js");
+const getCreneauDispo = require("./specs/spec3.js")
 const getCapaciteMax = require("./specs/spec4.js");
 const exportEDT = require("./specs/spec5.js");
 const getOccupation = require("./specs/spec6.js");
@@ -39,6 +40,12 @@ cli
 	.argument('<jour>', 'Jour de la semaine pour la recherche (L,MA,ME,J,V,S).')
 	.action(({ args, logger }) => getSallesLibres(args, logger))
 
+  // afficher les créneaux disponible d'une salle donnée
+  .command("getCreneauDispo", "Déterminer les créneaux disponible d'une salle donnée")
+  .alias('SPEC3')
+  .argument('<needle>', 'L ID de la salle en question')
+  .action(({args, options, logger}) => getCreneauDispo(args.needle, logger))
+
   // afficher la capacité maximale des salles
   .command("getCapaciteMax", "Détermine la capacité maximale d'une salle donnée")
   .alias('SPEC4')
@@ -61,8 +68,9 @@ cli
   // afficher le taux d'occupation des salles selectionnés
   .command("getOccupation", "Détermine le taux d'occupation des salles selectionnés")
   .alias('SPEC6')
+  .argument('<file>', "Nom du fichier des taux d'occupation généré (ex : ./resultats.svg)")
   .argument('<needle>',"Le nom de la salle à connaitre le taux d'occupation séparé par des virgules")
-  .action(({args, options, logger}) => getOccupation(args.needle, logger))
+  .action(({args, options, logger}) => getOccupation(args.file, args.needle, logger))
 
   // afficher le nombre de salles de classe pour une capacité d'accueil donnée
   .command("getNbSalleCapacite", "Détermine le nombre de salles par capacité d'accueil maximale")
