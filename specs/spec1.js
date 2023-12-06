@@ -14,12 +14,10 @@ function spec1(args, logger) {
         analyzer = new CRUParser();
         analyzer.parse(data);
 
-
         let CRUAFiltrer = analyzer.parsedCRU;
         let CRUFiltres = [];
         let uniqueCru = [];
 
-        //à filtrer
         for (let i = 0; i < CRUAFiltrer.length; i++) {
           let ueCurrent = analyzer.parsedCRU[i].ue;
           if (ueCurrent == args) {
