@@ -5,8 +5,8 @@ Ce parser doit permettre de traiter les fichiers au format CRU, qui corresponden
 ### Requirements
 Les fichiers data.edt doivent respecter la grammaire suivante : 
 
+UE = ‘+’ NomUE CRLF 1* Séance
 FichierDonnees = 1* UE 
-UE = ‘+’ NomUE CRLF 1* Séance 
 NomUE = 2*7 ALPHA *2 DIGIT *1 ALPHA *1 ( 'A' / 'T1' / 'F' / 'R' )
 Séance = ‘1,’ Type ’, P=’ 1*3DIGIT ‘, H=’ 1*2 Cours ‘/’ CRLF 
 Type = (‘T’/’D’/’C’) (‘1’/’2’/’3’/’4’/’5’/’6’/’7’/’8’/’9’/’10’/’11’/’12’/’13’/’14’/’15’)
