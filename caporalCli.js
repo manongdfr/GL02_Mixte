@@ -38,7 +38,7 @@ cli
 	.argument('<jour>', 'Jour de la semaine pour la recherche (L,MA,ME,J,V,S).')
 	.action(({ args, logger }) => getSallesLibres(args, logger))
 
-  // afficher la capacité maximale des salles
+  // afficher les créneaux disponible d'une salle donnée
   .command("getCreneauDispo", "Déterminer les créneaux disponible d'une salle donnée")
   .alias('SPEC3')
   .argument('<needle>', 'L ID de la salle en question')
@@ -53,8 +53,9 @@ cli
   // afficher le taux d'occupation des salles selectionnés
   .command("getOccupation", "Détermine le taux d'occupation des salles selectionnés")
   .alias('SPEC6')
+  .argument('<file>', 'Le fichier dans lequel on veut enregistrer le graphique (ex : ./resultats.svg)')
   .argument('<needle>',"Le nom de la salle à connaitre le taux d'occupation séparé par des virgules")
-  .action(({args, options, logger}) => getOccupation(args.needle, logger))
+  .action(({args, options, logger}) => getOccupation(args.file, args.needle, logger))
 
   // afficher le nombre de salles de classe pour une capacité d'accueil donnée
   .command("getNbSalleCapacite", "Détermine le nombre de salles par capacité d'accueil maximale")
