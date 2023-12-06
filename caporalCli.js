@@ -53,7 +53,7 @@ cli
   // afficher le taux d'occupation des salles selectionnés
   .command("getOccupation", "Détermine le taux d'occupation des salles selectionnés")
   .alias('SPEC6')
-  .argument('<file>', "Nom du fichier des taux d'occupation généré (ex : ./resultats.svg)"")
+  .argument('<file>', "Nom du fichier des taux d'occupation généré (ex : ./resultats.svg)")
   .argument('<needle>',"Le nom de la salle à connaitre le taux d'occupation séparé par des virgules")
   .action(({args, options, logger}) => getOccupation(args.file, args.needle, logger))
 
