@@ -31,8 +31,6 @@ function spec1(args, logger) {
             });
           }
         }
-        
-        console.log(uniqueCru)
 
         //answer
         if (uniqueCru.length > 0) {
