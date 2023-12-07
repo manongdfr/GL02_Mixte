@@ -18,6 +18,7 @@ Heure= ‘8’ / ‘9’ / ‘10’ / ‘11’ / ‘12’ / ‘13’ / ‘14’ 
 Salle = *1 (1 ALPHA 3 DIGIT / ‘SPOR’ / ‘EXT1’ / ‘IUT1’) 
 
 
+
 ### Installation : 
 
     $ npm install -i
@@ -34,17 +35,39 @@ Salle = *1 (1 ALPHA 3 DIGIT / ‘SPOR’ / ‘EXT1’ / ‘IUT1’)
     $ node caporalCli.js readme
 -----------------------------------------------------------------------------
     getSalle  : Afficher les salles d'une matière donnée
-    paramètre : ue - nom d'UE (exemple : GL02)
+    paramètres : ue - nom d'UE (exemple : GL02)
 
     $ node caporalCli.js getSalle <ue>
 -----------------------------------------------------------------------------
     getSallesLibres  : Afficher les salles libres sur un créneau donné
-    paramètre : heureDébut - début du créneau souhaité (exemple : 9:00)
+    paramètres: heureDébut - début du créneau souhaité (exemple : 9:00)
                 heureFin - fin du créneau souhaité (exemple : 18:00)
                 jour - jour (exemple : L)
 
     $ node caporalCli.js getSallesLibres <heureDébut> <heureFin> <jour>
 -----------------------------------------------------------------------------
+    getCreneauDispo : Déterminer les créneaux disponible d'une salle donnée
+    paramètres: salle - L'ID de la salle en question
+    
+    $ node caporalCli.js getCreneauDispo <salle>
+-----------------------------------------------------------------------------
+    getCapaciteMax : Détermine la capacité maximale d'une salle donnée
+    paramètres: salle - Le nom de la salle à déterminer la camacité maximale
+    
+    $ node caporalCli.js getCapaciteMax <salle>
+-----------------------------------------------------------------------------
+    exportEDT: Export d'un type de cours de l'utilisateur entre 2 dates données
+    paramètres: ue - Liste des UE inscrit : ['UE1','UE2','UE3']
+                type - Catégorie du cours à exporter : C / D / T
+                jourDebut - Première balise pour la recherche des jours de la semaine 
+                horaireDebut - Première balise pour la recherche des heures
+                jourFin - Deuxième balise pour la recherche des jours de la semaine 
+                horaireFin - Deuxième balise pour la recherche des heures
+                dateDebutEDT - Première balise pour l'affichage de l'emploi du temps
+                dateFinEDT -  Deuxième balise pour l'affichage de l'emploi du temps
+
+    $ node caporalCli.js <ue> <type> <jourDebut> <horaireDebut> <jourFin> <horaireFin> <dateDebutEDT> <datefinEDT>
+    
 
 ### Jeu de données
 Les données fournies sont présentes dans le fichier SujetA_data
@@ -54,3 +77,10 @@ S. Olgard (sarah.olgard@utt.fr)
 A. Pochard (alexis.pochard@utt.fr)
 X. Boone (xuan.boone@utt.fr)
 M. Godefroy (manon.godefroy@utt.fr)
+
+
+### Minimum requirements:
+512 GB de mémoire
+Intel core i9 14900K ou equivalent
+2x RTX GeForce 4090
+80GB d'espace de stockage

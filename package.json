@@ -4,7 +4,7 @@
   "description": "Offer an interface for a recursive descent parser implemented in Javascript for reading and processing the Verbose POI Format (VPF). This format allows to describe any list of Point of Interest (POI) with an associated list of evaluation. The files are in text format and should respect the following grammar.",
   "main": "caporalCli.js",
   "scripts": {
-    "test" : "jasmine"
+    "test": "jasmine"
   },
   "keywords": [],
   "author": "matthieu.tixier@utt.fr",
@@ -20,7 +20,6 @@
     "vega-lite": "^4.17.0"
   },
   "devDependencies": {
-    "jasmine": "^3.6.3"
+    "jasmine": "^3.99.0"
   }
-
 }
