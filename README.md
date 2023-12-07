@@ -32,7 +32,7 @@ Salle = *1 (1 ALPHA 3 DIGIT / ‘SPOR’ / ‘EXT1’ / ‘IUT1’)
 
 -----------------------------------------------------------------------------
     
-    `readme    : Afficher le manuel dans la console`
+    readme    : Afficher le manuel dans la console
     $ node caporalCli.js readme
 -----------------------------------------------------------------------------
     getSalle  : Afficher les salles d'une matière donnée
@@ -78,10 +78,3 @@ S. Olgard (sarah.olgard@utt.fr)
 A. Pochard (alexis.pochard@utt.fr)
 X. Boone (xuan.boone@utt.fr)
 M. Godefroy (manon.godefroy@utt.fr)
-
-
-### Minimum requirements:
-512 GB de mémoire
-Intel core i9 14900K ou equivalent
-2x RTX GeForce 4090
-80GB d'espace de stockage
