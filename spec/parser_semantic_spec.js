@@ -1,4 +1,6 @@
 const CRU = require('../CRU');
+const spec1 = require('../specs/spec1')
+
 
 describe("Program Semantic testing of CRU", function(){
 	
@@ -13,4 +15,12 @@ describe("Program Semantic testing of CRU", function(){
 		expect(this.c).toEqual(jasmine.objectContaining({ue: "GL02"}));
 		
 	});	
+
+	it("should return an array with different salles", async function(){
+		const result = await spec1("GL02",false);
+		//console.log(result)
+		expect(result).toContain('---- C002 ----');
+		expect(result).toContain('---- M102 ----');
+		
+	});
 });
