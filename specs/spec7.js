@@ -55,8 +55,8 @@ function spec7(logger) {
                     capacityCount[capacity] = 1;
                 }
             });
-            console.log("Voilà un classement du nombres de salles de classes par capacité maximale : ")
-            console.log(capacityCount);
+            logger.info("Voilà un classement du nombres de salles de classes par capacité maximale : ")
+            // console.log(capacityCount);
             console.log(tab1)
         })
         .catch((error) => {

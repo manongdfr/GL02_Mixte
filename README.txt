@@ -19,11 +19,9 @@ Salle = *1 (1 ALPHA 3 DIGIT / ‘SPOR’ / ‘EXT1’ / ‘IUT1’)
 
 
 ### Installation : 
-
     $ npm install -i
 
 ### Utilisation : 
-
     $ node caporalCli.js <command> -h
     -f or --help :          afficher l'aide du programme
 
@@ -48,6 +46,20 @@ Salle = *1 (1 ALPHA 3 DIGIT / ‘SPOR’ / ‘EXT1’ / ‘IUT1’)
 
 ### Jeu de données
 Les données fournies sont présentes dans le fichier SujetA_data
+
+### Test Unitaires
+    npm test
+
+Test_semantic : 
+    "can create a new CRU"
+
+Test_syntactic : 
+    "can read a 'ue' from a simulated input"
+    "can read a 'place' from a simulated input"
+    "can read a 'salle' from a simulated input"
+    "can read a 'statut' from a simulated input"
+    "can read a 'type' from a simulated input"
+    "can read a 'sousgroupe' from a simulated input"
 
 ### Liste des contributeurs 
 S. Olgard (sarah.olgard@utt.fr)

@@ -34,12 +34,12 @@ function spec1(args, logger) {
         if (uniqueCru.length > 0) {
           for (let i = 0; i < uniqueCru.length; i++) {
             console.log(
-              "Les cours de l'UE ",
-              args,
-              " se déroulent dans les salles suivantes :"
+              "Les cours de l'UE".blue,
+              args.blue,
+              "se déroulent dans les salles suivantes :".blue
             );
               for (i = 0; i < uniqueCru.length; i++) {
-                console.log("---- ", uniqueCru[i], " ----");
+                 console.log("---- ", uniqueCru[i], " ----");
               }
           }
         } else {

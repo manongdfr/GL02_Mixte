@@ -63,7 +63,6 @@ function spec6(file, args, logger) {
         dailyHoursArray[dayToNum(cruDay)] += cruDuration(startTime, endTime);
 
         if (salleMap.has(crulist[i][j].salle)) {
-          //console.log(salleMap.get(crulist[i][j].salle))
           salleMap.set(
             crulist[i][j].salle,
             salleMap.get(crulist[i][j].salle) + cruDuration(startTime, endTime)
@@ -130,8 +129,8 @@ function spec6(file, args, logger) {
         fs.writeFileSync(file, res);
         view.finalize();
         console.log(
-          "Le fichier a bien été enregistré avec le chemin suivant :".green,
-          file.green
+          "Le fichier a bien été enregistré avec le chemin suivant :".blue,
+          file.blue
         );
       });
     }
