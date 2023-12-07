@@ -31,8 +31,8 @@ Salle = *1 (1 ALPHA 3 DIGIT / ‘SPOR’ / ‘EXT1’ / ‘IUT1’)
 ### Commandes
 
 -----------------------------------------------------------------------------
-readme
-    readme    : Afficher le manuel dans la console
+    
+    `readme    : Afficher le manuel dans la console`
     $ node caporalCli.js readme
 -----------------------------------------------------------------------------
     getSalle  : Afficher les salles d'une matière donnée
