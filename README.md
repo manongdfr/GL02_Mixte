@@ -68,6 +68,12 @@ Salle = \*1 (1 ALPHA 3 DIGIT / ‘SPOR’ / ‘EXT1’ / ‘IUT1’)
 
 ---
 
+    getNbSalleCapacite : Détermine le nombre de salles par capacité d'accueil maximale
+    paramètres: néant 
+
+    $ node caporalCli.js getNbSalleCapacite
+
+---
     exportEDT: Export d'un type de cours de l'utilisateur entre 2 dates données
     paramètres: ue - Liste des UE inscrit : ['UE1','UE2','UE3']
                 type - Catégorie du cours à exporter : C / D / T
