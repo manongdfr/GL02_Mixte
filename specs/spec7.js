@@ -56,7 +56,6 @@ function spec7(logger) {
                 }
             });
             logger.info("Voilà un classement du nombres de salles de classes par capacité maximale : ")
-            // console.log(capacityCount);
             console.log(tab1)
         })
         .catch((error) => {
