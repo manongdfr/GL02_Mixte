@@ -3,7 +3,6 @@ const CRUParser = require("../CRUParser");
 let tabAlph = ["AB", "CD", "EF", "GH", "IJ", "KL", "MN", "OP", "QR", "ST"];
 
 function spec4(args, logger) {
-    console.log(args);
     let fini = false;
     let placeMax = 0;
     while (fini === false) {
@@ -34,14 +33,10 @@ function spec4(args, logger) {
                     if (CRUFiltres.length > 0) {
                         for (let lire = 0; lire < CRUFiltres.length; lire++) {
                             let placeAComparer = CRUFiltres[lire].place;
-                            //console.log('Place max =', placeMax, "\n place a comparer = ", placeAComparer)
                             if (parseInt(placeAComparer) > parseInt(placeMax)) {
                                 placeMax = placeAComparer;
-                                //console.log('Plus grand')
-                            } else {
-                                // console.log('Plus petit')
                             }
-                            if (parcourir === tabAlph.length - 1 && lire === CRUFiltres.length - 1) { console.log("La capacité maximale de la salle", args, "est", placeMax) }
+                            if (parcourir === tabAlph.length - 1 && lire === CRUFiltres.length - 1) { console.log(`La capacité maximale de la salle, ${args}, est, ${placeMax}`.blue) }
                         }
                     }
                 }
