@@ -77,12 +77,13 @@ Salle = \*1 (1 ALPHA 3 DIGIT / ‘SPOR’ / ‘EXT1’ / ‘IUT1’)
     exportEDT: Export d'un type de cours de l'utilisateur entre 2 dates données
     paramètres: ue - Liste des UE inscrit : ['UE1','UE2','UE3']
                 type - Catégorie du cours à exporter : C / D / T
-                jourDebut - Première balise pour la recherche des jours de la semaine
-                horaireDebut - Première balise pour la recherche des heures
-                jourFin - Deuxième balise pour la recherche des jours de la semaine
-                horaireFin - Deuxième balise pour la recherche des heures
-                dateDebutEDT - Première balise pour l'affichage de l'emploi du temps
-                dateFinEDT -  Deuxième balise pour l'affichage de l'emploi du temps
+                jourDebut - Première balise pour la recherche des jours de la semaine (sous la forme : L, MA, ME, J, V, S)
+                horaireDebut - Première balise pour la recherche des heures (sous la forme : 8:00)
+                jourFin - Deuxième balise pour la recherche des jours de la semaine(sous la forme : L, MA, ME, J, V, S)
+                horaireFin - Deuxième balise pour la recherche des heures(sous la forme : 8:00)
+                dateDebutEDT - Première balise pour l'affichage de l'emploi du temps(sous la forme : 06/12/2023 )
+                dateFinEDT -  Deuxième balise pour l'affichage de l'emploi du temps(sous la forme : 06/12/2023 )
+                
 
     $ node caporalCli.js <ue> <type> <jourDebut> <horaireDebut> <jourFin> <horaireFin> <dateDebutEDT> <datefinEDT>
 
