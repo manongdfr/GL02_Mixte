@@ -2,7 +2,7 @@ Manuel & README | GL02_Mixte - Sujet A
 
 ### Description :
 
-Ce parser doit permettre de traiter les fichiers au format CRU, qui correspondent à des emploi du temps.
+Ce parser doit permettre de traiter les fichiers au format CRU, qui correspondent à des emplois du temps.
 
 ### Requirements
 
@@ -33,62 +33,59 @@ Salle = \*1 (1 ALPHA 3 DIGIT / ‘SPOR’ / ‘EXT1’ / ‘IUT1’)
 
 ---
 
-    readme : Afficher le manuel dans la console
+    readme : Afficher le manuel dans la console.
     $ node caporalCli.js readme
 
 ---
 
-    getSalle : Afficher les salles d'une matière donnée
+    getSalle : Afficher les salles d'une matière donnée.
     paramètres : ue - nom d'UE (exemple : GL02)
 
     $ node caporalCli.js getSalle <ue>
 
 ---
 
-    getSallesLibres : Afficher les salles libres sur un créneau donné
+    getSallesLibres : Afficher les salles libres sur un créneau donné.
     paramètres: heureDébut - début du créneau souhaité (exemple : 9:00)
                 heureFin - fin du créneau souhaité (exemple : 18:00)
-                jour - jour (exemple : L)
+                jour - jour (Notations des jours : L MA ME J V S)
 
     $ node caporalCli.js getSallesLibres <heureDébut> <heureFin> <jour>
 
 ---
 
-    getCreneauDispo : Déterminer les créneaux disponible d'une salle donnée
+    getCreneauDispo : Déterminer les créneaux disponibles d'une salle donnée.
     paramètres: salle - L'ID de la salle en question
 
     $ node caporalCli.js getCreneauDispo <salle>
 
 ---
 
-    getCapaciteMax : Détermine la capacité maximale d'une salle donnée
-    paramètres: salle - Le nom de la salle à déterminer la camacité maximale
+    getCapaciteMax : Détermine la capacité maximale d'une salle donnée.
+    paramètres: salle - Le nom de la salle à déterminer la capacité maximale
 
     $ node caporalCli.js getCapaciteMax <salle>
 
 ---
 
-    getNbSalleCapacite : Détermine le nombre de salles par capacité d'accueil maximale
+    getNbSalleCapacite : Détermine le nombre de salles par capacités d'accueil maximales.
     paramètres: néant 
 
     $ node caporalCli.js getNbSalleCapacite
 
 ---
-    exportEDT: Export d'un type de cours de l'utilisateur entre 2 dates données
+    exportEDT: Export d'un type de cours de l'utilisateur entre 2 dates données.
     paramètres: ue - Liste des UE inscrit : ['UE1','UE2','UE3']
                 type - Catégorie du cours à exporter : C / D / T
-                jourDebut - Première balise pour la recherche des jours de la semaine
-                horaireDebut - Première balise pour la recherche des heures
-                jourFin - Deuxième balise pour la recherche des jours de la semaine
-                horaireFin - Deuxième balise pour la recherche des heures
-                dateDebutEDT - Première balise pour l'affichage de l'emploi du temps
-                dateFinEDT -  Deuxième balise pour l'affichage de l'emploi du temps
+                jourDebut - Première balise pour la recherche des jours de la semaine (sous la forme : L, MA, ME, J, V, S)
+                horaireDebut - Première balise pour la recherche des heures (sous la forme : 8:00)
+                jourFin - Deuxième balise pour la recherche des jours de la semaine(sous la forme : L, MA, ME, J, V, S)
+                horaireFin - Deuxième balise pour la recherche des heures(sous la forme : 8:00)
+                dateDebutEDT - Première balise pour l'affichage de l'emploi du temps(sous la forme : 06/12/2023 )
+                dateFinEDT -  Deuxième balise pour l'affichage de l'emploi du temps(sous la forme : 06/12/2023 )
+                
 
     $ node caporalCli.js <ue> <type> <jourDebut> <horaireDebut> <jourFin> <horaireFin> <dateDebutEDT> <datefinEDT>
-
-### Jeu de données
-
-Les données fournies sont présentes dans le fichier SujetA_data
 
 ### Jeu de données
 

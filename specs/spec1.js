@@ -5,7 +5,9 @@ outputList = []
 
 function spec1(args,notTesting, logger) {
   let promises = [];
+  var existe = 0;
   for (let i = 0; i < tabAlph.length; i++) {
+    
     promises.push(
       new Promise((resolve, reject) => {
         fs.readFile(
@@ -24,10 +26,11 @@ function spec1(args,notTesting, logger) {
 
             for (let i = 0; i < CRUAFiltrer.length; i++) {
               let ueCurrent = analyzer.parsedCRU[i].ue;
+              
               if (ueCurrent == args) {
                 CRUFiltres.push(CRUAFiltrer[i].salle);
                 
-                //!\ filtrer les doubons /!\
+                //!\ filtrer les doublons /!\
                 uniqueCru = CRUFiltres.filter(function (value, index, array) {
                     return array.indexOf(value) === index;
                 
@@ -39,6 +42,7 @@ function spec1(args,notTesting, logger) {
 
             //answer
             if (uniqueCru.length > 0) {
+              existe = 1;
               for (let i = 0; i < uniqueCru.length; i++) {
                 if(notTesting){
                   console.log(
@@ -57,16 +61,22 @@ function spec1(args,notTesting, logger) {
                     outputList.push(output)
                   }
               }
-            } else {
-              //logger.warn("ce cours n'a pas de salle attribuée");
+            }
+            else {
+              
             }
           }
         );
       })
       );
   }
+
   return Promise.all(promises).then(() => {
-    //console.log(outputList)
+    
+    if (existe == 0){
+      console.log("Ce cours n'a pas de salle attribuée\nVérifiez si l'UE existe bien et si elle a été écrite en majuscule.");
+    }
+
     return outputList
   });
 }

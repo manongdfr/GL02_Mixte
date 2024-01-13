@@ -4,9 +4,12 @@ let tabAlph = ["AB", "CD", "EF", "GH", "IJ", "KL", "MN", "OP", "QR", "ST"];
 
 function spec2(args, logger) {
   const jours = ["L", "MA", "ME", "J", "V", "S"];
-
-  if (!jours.includes(args.jour)) {
-    logger.info("Les jours que vous avez entrez ne sont pas valides".red);
+  if (!jours.includes(args.jour) && (args.jour=='D' || args.jour=='DI' || args.jour=='Di')) {
+    logger.info("Aucun cours n'a lieu le dimanche, essayez un autre jour de la semaine.\nRappel de la syntaxe des jours de la semaine : L MA ME J V S".red);
+    return;
+  }
+  else if (!jours.includes(args.jour)) {
+    logger.info("Le jour que vous avez entré n'est pas valide. \nRappel de la syntaxe des jours de la semaine : L MA ME J V S".red);
     return;
   }
 
@@ -40,7 +43,7 @@ function spec2(args, logger) {
   if (
     !(horaires.includes(args.heureDebut) && horaires.includes(args.heureFin))
   ) {
-    logger.info("Les horaires que vous avez entrez ne sont pas valides".red);
+    logger.info("Les horaires que vous avez indiqué ne sont pas valides \nRappel : Les cours ont lieu entre 8:00 et 20:00 et ne peuvent être saisis que s'ils se terminent en XX:30 ou XX:00".red);
     return;
   }
 
@@ -107,9 +110,9 @@ function spec2(args, logger) {
       });
 
       if(final.length == 0){
-        logger.info('pas de salle disponible pour les horaires demandées'.blue)
+        logger.info('Aucune salle disponible aux horaires indiqués'.blue)
       } else {
-        console.log("Salles disponibles à ces horaires : ".blue);
+        console.log("Salles disponibles aux horaires indiqués : ".blue);
         logger.info(final.map((item) => item[1]).join(", "));
       }
     })

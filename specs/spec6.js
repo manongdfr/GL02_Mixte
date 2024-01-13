@@ -6,54 +6,67 @@ let tabAlph = ["AB", "CD", "EF", "GH", "IJ", "KL", "MN", "OP", "QR", "ST"];
 const vg = require("vega");
 const vegalite = require("vega-lite");
 
+// La fonction spec6 prend en entrée un fichier, des arguments et un logger
 function spec6(file, args, logger) {
+  // Si le jour spécifié n'est pas valide, la fonction s'arrête
   if (fullDayToNum(args) == -1) {
     return;
   }
+  // Initialisation de deux listes pour stocker les CRU et les promesses
   var crulist = [];
   let promises = [];
+  // Pour chaque lettre de l'alphabet, une nouvelle promesse est créée
   for (let i = 0; i < tabAlph.length; i++) {
     promises.push(
       new Promise((resolve, reject) => {
+        // Lecture du fichier 'edt.cru' correspondant à la lettre
         fs.readFile(
           "SujetA_data/" + tabAlph[i] + "/edt.cru",
           "utf8",
           function (err, data) {
+            // Si une erreur se produit lors de la lecture, un avertissement est affiché
             if (err) {
               return logger.warn(err);
             }
+            // Analyse des données du fichier
             analyzer = new CRUParser();
             analyzer.parse(data);
 
+            // Filtrage des CRU en fonction du jour spécifié
             let CRUAFiltrer = analyzer.parsedCRU;
             let filteredCru = [];
             let uniqueCru = [];
 
+            // Pour chaque CRU, si le jour correspond au jour spécifié, il est ajouté à la liste
             for (let j = 0; j < CRUAFiltrer.length; j++) {
               if (typeof CRUAFiltrer[j].horaire != "undefined") {
                 let jourCurrent = CRUAFiltrer[j].horaire.matched[0];
                 if (dayToNum(jourCurrent) == fullDayToNum(args)) {
                   filteredCru.push(CRUAFiltrer[j]);
                 }
-              } else {
-                //console.log(`Attention, un CRU contient une horaire vide pour l'UE:${CRUAFiltrer[i].ue} }` )
               }
             }
+            // Suppression des doublons dans la liste des CRU
             uniqueCru = filteredCru.filter(function (value, index, array) {
               return array.indexOf(value) === index;
             });
+            // Ajout des CRU uniques à la liste globale
             crulist.push(uniqueCru);
 
+            // Résolution de la promesse
             resolve();
           }
         );
       })
     );
   }
+  // Une fois que toutes les promesses sont résolues, le traitement des données peut commencer
   Promise.all(promises).then(() => {
+    // Initialisation des variables pour le calcul des statistiques
     let dailyHoursArray = [0, 0, 0, 0, 0];
-
     let salleMap = new Map();
+
+    // Pour chaque CRU, calcul de la durée et mise à jour des statistiques
     for (let i = 0; i < crulist.length; i++) {
       for (let j = 0; j < crulist[i].length; j++) {
         let currentCRU = crulist[i][j];
@@ -62,6 +75,7 @@ function spec6(file, args, logger) {
         let endTime = currentCRU.horaire.matched[4];
         dailyHoursArray[dayToNum(cruDay)] += cruDuration(startTime, endTime);
 
+        // Mise à jour de la durée totale pour chaque salle
         if (salleMap.has(crulist[i][j].salle)) {
           salleMap.set(
             crulist[i][j].salle,
@@ -72,27 +86,26 @@ function spec6(file, args, logger) {
         }
       }
     }
-    // réarranger le map
+    // Tri du map par valeur
     let sortedArray = Array.from(salleMap).sort((a, b) =>
       a[1] > b[1] ? 1 : -1
     );
     let sortedMapByValue = new Map(sortedArray);
 
-    //montrer le taux d'occupation de la salle
-    //8 à 20 heures = 12 heures * 5 jours = 60 heures
+    // Affichage du taux d'occupation de chaque salle
     console.log(`Occupation de la salle le ${args}:`);
     sortedMapByValue.forEach((value, key) => {
       console.log(`${key}: ${((value / 12) * 100).toFixed(1)}%`);
     });
+    // Appel de la fonction de visualisation après un délai
     setTimeout(visualisation, 1000);
 
+    // La fonction de visualisation génère un tableau avec le taux d'occupation de chaque salle
     function visualisation() {
-      // tab taux pour organiser les stats lues
       let taux = [];
       sortedMapByValue.forEach((value, key) => {
         taux.push({ salle: key, taux: value });
       });
-
       var avgChart = {
         data: {
           values: taux,
